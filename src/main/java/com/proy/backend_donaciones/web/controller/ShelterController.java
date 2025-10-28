@@ -19,7 +19,6 @@ public class ShelterController {
 
     // Endpoint para que cualquier usuario autenticado vea la lista
     @GetMapping
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<Shelter>> getAll() {
         return ResponseEntity.ok(shelterService.getAll());
     }

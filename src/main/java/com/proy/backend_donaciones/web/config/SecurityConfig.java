@@ -38,6 +38,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // --- CAMBIO CLAVE: Simplificado para el nuevo proyecto ---
                         .requestMatchers("/auth/**").permitAll() // Permite todo bajo /auth
+                        .requestMatchers("/shelters","/ngos").permitAll()
                         .anyRequest().authenticated() // Requiere autenticación para todo lo demás
                 );
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
