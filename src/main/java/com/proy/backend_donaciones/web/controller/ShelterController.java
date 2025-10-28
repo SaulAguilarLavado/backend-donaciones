@@ -17,20 +17,19 @@ public class ShelterController {
     @Autowired
     private ShelterService shelterService;
 
-    // Endpoint para que cualquier usuario autenticado vea la lista
+    // --- ¡AQUÍ ESTÁ LA CORRECCIÓN! ---
     @GetMapping
+    @PreAuthorize("isAuthenticated()") // Añadimos esta línea
     public ResponseEntity<List<Shelter>> getAll() {
         return ResponseEntity.ok(shelterService.getAll());
     }
 
-    // Endpoint para que SOLO el ADMIN pueda crear un nuevo Albergue
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Shelter> save(@RequestBody Shelter shelter) {
         return new ResponseEntity<>(shelterService.save(shelter), HttpStatus.CREATED);
     }
 
-    // Endpoint para que SOLO el ADMIN pueda eliminar un Albergue
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable("id") long shelterId) {

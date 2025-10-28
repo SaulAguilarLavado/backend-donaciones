@@ -17,20 +17,19 @@ public class NgoController {
     @Autowired
     private NgoService ngoService;
 
-    // Endpoint para que cualquier usuario autenticado vea la lista
+    // --- ¡AQUÍ ESTÁ LA CORRECCIÓN! ---
     @GetMapping
+    @PreAuthorize("isAuthenticated()") // Añadimos esta línea
     public ResponseEntity<List<Ngo>> getAll() {
         return ResponseEntity.ok(ngoService.getAll());
     }
 
-    // Endpoint para que SOLO el ADMIN pueda crear una nueva ONG
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Ngo> save(@RequestBody Ngo ngo) {
         return new ResponseEntity<>(ngoService.save(ngo), HttpStatus.CREATED);
     }
 
-    // Endpoint para que SOLO el ADMIN pueda eliminar una ONG
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable("id") long ngoId) {
