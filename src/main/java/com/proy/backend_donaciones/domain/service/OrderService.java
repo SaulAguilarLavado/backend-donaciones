@@ -1,71 +1,49 @@
 package com.proy.backend_donaciones.domain.service;
 
-
 import com.proy.backend_donaciones.domain.Order;
+import com.proy.backend_donaciones.domain.User;
 import com.proy.backend_donaciones.domain.repository.OrderRepository;
-import com.proy.backend_donaciones.persistence.PedidoRepository;
-import com.proy.backend_donaciones.persistence.crud.AlimentoCrudRepository;
-import com.proy.backend_donaciones.persistence.crud.UsuarioCrudRepository;
-import com.proy.backend_donaciones.persistence.entity.Alimento;
-import com.proy.backend_donaciones.persistence.entity.Pedido;
-import com.proy.backend_donaciones.persistence.entity.Usuario;
-import com.proy.backend_donaciones.persistence.mapper.OrderMapper;
+import com.proy.backend_donaciones.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class OrderService {
 
-    @Autowired
-    private OrderRepository repository;
-
-    @Autowired
-    private PedidoRepository pedidoRepository;
-
-    @Autowired
-    private AlimentoCrudRepository alimentoCrudRepository;
-
-    @Autowired
-    private UsuarioCrudRepository usuarioCrudRepository;
-
-    @Autowired
-    private OrderMapper mapper;
+    @Autowired private OrderRepository orderRepository;
+    @Autowired private UserRepository userRepository;
 
     public List<Order> getAll() {
-        return repository.getAll();
+        return orderRepository.getAll();
     }
 
     public Optional<Order> getById(long id) {
-        return repository.findById(id);
+        return orderRepository.findById(id);
     }
 
     public Order save(Order order) {
-        // Convertimos el DTO a entidad
-        Pedido pedido = mapper.toPedido(order);
+        // Obtenemos el donante del contexto de seguridad
+        String donanteEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        User donante = userRepository.findByEmail(donanteEmail)
+                .orElseThrow(() -> new RuntimeException("Usuario donante no encontrado"));
 
-        // Asignamos el alimento
-        Alimento alimento = alimentoCrudRepository.findById(order.getAlimentoId())
-                .orElseThrow(() -> new RuntimeException("Alimento no encontrado"));
-        pedido.setAlimento(alimento);
+        // Asignamos los datos de forma segura
+        order.setDonanteId(donante.getUserId());
+        order.setFechaCreacion(LocalDateTime.now());
+        order.setEstado("PENDIENTE");
 
-        // Asignamos el donante
-        Usuario donante = usuarioCrudRepository.findById(order.getDonanteId())
-                .orElseThrow(() -> new RuntimeException("Donante no encontrado"));
-        pedido.setDonante(donante);
-
-        // Guardamos en la BD
-        Pedido saved = pedidoRepository.saveEntity(pedido);
-
-        // Retornamos el DTO convertido
-        return mapper.toOrder(saved);
+        // Simplemente llamamos al repositorio, que ahora sabe cómo guardar todo
+        return orderRepository.save(order);
     }
 
     public boolean delete(long id) {
         return getById(id).map(order -> {
-            repository.delete(id);
+            orderRepository.delete(id);
             return true;
         }).orElse(false);
     }
