@@ -19,7 +19,7 @@ public class NgoController {
 
     // Endpoint para que cualquier usuario autenticado vea la lista
     @GetMapping
-    @PreAuthorize("isAuthenticated()")
+    
     public ResponseEntity<List<Ngo>> getAll() {
         return ResponseEntity.ok(ngoService.getAll());
     }
