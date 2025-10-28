@@ -37,6 +37,8 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
+    // --- BEAN PARA LA CONFIGURACIÓN DE CORS ---
+    // Este bean define las reglas sobre quién puede conectarse a tu backend.
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -58,7 +60,9 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated()
                 );
+
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 }
