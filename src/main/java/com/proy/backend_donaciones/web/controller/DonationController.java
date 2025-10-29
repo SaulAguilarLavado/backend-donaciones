@@ -24,12 +24,12 @@ public class DonationController {
         return new ResponseEntity<>(createdDonation, HttpStatus.CREATED);
     }
 
-    @GetMapping("/my")
-    public List<Donation> getMyDonations() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return donationService.getMyDonationsByEmail(email);
-    }
-
+   @GetMapping("/my")
+public List<Donation> getMyDonations() {
+    String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    System.out.println("🔍 Email autenticado: " + email);
+    return donationService.getMyDonationsByEmail(email);
+}
     @GetMapping("/{id}")
     public ResponseEntity<Donation> getById(@PathVariable Long id) {
         return donationService.getById(id)
