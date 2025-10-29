@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface PedidoCrudRepository extends JpaRepository<Pedido, Long> {
     List<Pedido> findByDonanteId(Long donanteId);
+     List<Pedido> findByDonanteEmail(String email); 
 }
