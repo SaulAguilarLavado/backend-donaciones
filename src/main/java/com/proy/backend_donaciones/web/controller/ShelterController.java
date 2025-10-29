@@ -19,7 +19,6 @@ public class ShelterController {
 
     // --- ¡AQUÍ ESTÁ LA CORRECCIÓN! ---
     @GetMapping
-    @PreAuthorize("isAuthenticated()") // Añadimos esta línea
     public ResponseEntity<List<Shelter>> getAll() {
         return ResponseEntity.ok(shelterService.getAll());
     }

@@ -15,7 +15,9 @@ INSERT INTO ongs (nombre, descripcion, direccion, telefono, url_imagen) VALUES
 ('Fundación Futuro', 'Apoya proyectos de desarrollo sostenible y capacitación laboral.', 'Av. Los Rosales 321, Lima', '+51 976543210', NULL),
 ('ONG Luz y Camino', 'Proporciona refugio y orientación a jóvenes en riesgo social.', 'Jr. Los Girasoles 654, Lima', '+51 911223344', NULL);
 
-
+select * from usuarios;
+select * from usuarios_roles;
+select * from roles;
 DROP TABLE albergues;
 select * from albergues;
 
