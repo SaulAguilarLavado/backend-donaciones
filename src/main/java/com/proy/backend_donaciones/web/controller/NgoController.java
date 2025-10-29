@@ -19,7 +19,6 @@ public class NgoController {
 
     // --- ¡AQUÍ ESTÁ LA CORRECCIÓN! ---
     @GetMapping
-    @PreAuthorize("isAuthenticated()") // Añadimos esta línea
     public ResponseEntity<List<Ngo>> getAll() {
         return ResponseEntity.ok(ngoService.getAll());
     }
