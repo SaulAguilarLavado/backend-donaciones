@@ -9,4 +9,7 @@ public interface OrderRepository {
     Optional<Order> findById(long id);
     Order save(Order order);
     void delete(long id);
+     List<Order> getByDonorId(long donorId);
+     List<Order> findByUsuarioEmail(String email);
+
 }

@@ -47,4 +47,13 @@ public class OrderService {
             return true;
         }).orElse(false);
     }
+
+   public List<Order> getMyOrders(long donorId) {
+        return orderRepository.getByDonorId(donorId);
+    }
+
+    public List<Order> getMyOrdersByEmail(String email) {
+    return orderRepository.findByUsuarioEmail(email);
+}
+
 }

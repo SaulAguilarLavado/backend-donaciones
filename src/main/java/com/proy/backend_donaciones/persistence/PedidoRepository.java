@@ -52,4 +52,14 @@ public class PedidoRepository implements OrderRepository {
     public void delete(long id) {
         crud.deleteById(id);
     }
+
+     @Override
+    public List<Order> getByDonorId(long donorId) {
+        return mapper.toOrders(crud.findByDonanteId(donorId));
+    }
+
+    @Override
+public List<Order> findByUsuarioEmail(String email) {
+    return mapper.toOrders(crud.findByDonanteEmail(email));
+}
 }

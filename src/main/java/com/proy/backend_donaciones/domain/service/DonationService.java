@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DonationService {
@@ -18,39 +19,57 @@ public class DonationService {
     @Autowired private DonationRepository donationRepository;
     @Autowired private UserRepository userRepository;
 
-    public Donation createDonation(CreateDonationRequest request) {
-        // Obtenemos el email del usuario autenticado (¡Seguridad!)
-        String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        User donor = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new IllegalStateException("Usuario no autenticado correctamente."));
-
-        // Creamos el objeto de dominio a partir del DTO
-        Donation newDonation = new Donation();
-        newDonation.setFoodCategory(request.getFoodCategory());
-        newDonation.setDescription(request.getDescription());
-        newDonation.setApproximateQuantity(request.getApproximateQuantity());
-        newDonation.setUnit(request.getUnit());
-        newDonation.setPickupAddress(request.getPickupAddress());
-        newDonation.setPickupDate(request.getPickupDate());
-        newDonation.setPickupTime(request.getPickupTime());
-        newDonation.setContactPhone(request.getContactPhone());
-        newDonation.setAssignmentType(request.getAssignmentType());
-        newDonation.setBeneficiaryId(request.getBeneficiaryId());
-        newDonation.setBeneficiaryType(request.getBeneficiaryType());
-        newDonation.setConsumable(request.isConsumable());
-
-        // Asignamos los datos del sistema
-        newDonation.setDonorId(donor.getUserId());
-        newDonation.setCreationDate(LocalDateTime.now());
-        newDonation.setStatus("PENDIENTE");
-
-        return donationRepository.save(newDonation);
+    public List<Donation> getAll() {
+        return donationRepository.getAll();
     }
 
-    public List<Donation> findDonationsByCurrentUser() {
-        String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        User donor = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new IllegalStateException("Usuario no autenticado."));
-        return donationRepository.findByDonorId(donor.getUserId());
+    public Optional<Donation> getById(Long id) {
+        return donationRepository.findById(id);
+    }
+
+    public Donation save(Donation donation) {
+        // Obtener donante desde JWT
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User donor = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        donation.setDonorId(donor.getUserId());
+        donation.setCreationDate(LocalDateTime.now());
+        donation.setStatus("PENDIENTE");
+
+        return donationRepository.save(donation);
+    }
+
+    public boolean delete(Long id) {
+        return getById(id).map(donation -> {
+            donationRepository.delete(id);
+            return true;
+        }).orElse(false);
+    }
+
+    public List<Donation> getMyDonations(Long donorId) {
+        return donationRepository.findByDonorId(donorId);
+    }
+
+    public List<Donation> getMyDonationsByEmail(String email) {
+        return donationRepository.findByUsuarioEmail(email);
+    }
+
+    public Donation createDonation(CreateDonationRequest request) {
+        Donation donation = new Donation();
+        donation.setFoodCategory(request.getFoodCategory());
+        donation.setDescription(request.getDescription());
+        donation.setApproximateQuantity(request.getApproximateQuantity());
+        donation.setUnit(request.getUnit());
+        donation.setPickupAddress(request.getPickupAddress());
+        donation.setPickupDate(request.getPickupDate());
+        donation.setPickupTime(request.getPickupTime());
+        donation.setContactPhone(request.getContactPhone());
+        donation.setAssignmentType(request.getAssignmentType());
+        donation.setBeneficiaryId(request.getBeneficiaryId());
+        donation.setBeneficiaryType(request.getBeneficiaryType());
+        donation.setConsumable(request.isConsumable());
+
+        return save(donation);
     }
 }

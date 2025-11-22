@@ -47,4 +47,10 @@ public class DonacionRepository implements DonationRepository {
     public void delete(Long id) {
         donacionCrudRepository.deleteById(id);
     }
+    @Override
+public List<Donation> findByUsuarioEmail(String email) {
+    return mapper.toDonations(
+        donacionCrudRepository.findByDonanteEmailOrderByFechaCreacionDesc(email)
+    );
+}
 }

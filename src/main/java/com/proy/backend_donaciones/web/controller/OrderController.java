@@ -3,13 +3,15 @@ package com.proy.backend_donaciones.web.controller;
 import com.proy.backend_donaciones.domain.Order;
 import com.proy.backend_donaciones.domain.service.OrderService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.security.core.Authentication;
 
 @RestController
 @RequestMapping("/orders")
-@CrossOrigin(origins = "*")
+
 public class OrderController {
 
     private final OrderService service;
@@ -47,4 +49,10 @@ public class OrderController {
                 ? ResponseEntity.noContent().build()
                 : ResponseEntity.notFound().build();
     }
+    @GetMapping("/my")
+public List<Order> getMyOrders() {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String email = auth.getName(); // email del usuario logueado
+    return service.getMyOrdersByEmail(email); // filtra por usuario
+}
 }
