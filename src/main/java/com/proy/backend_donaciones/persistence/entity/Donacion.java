@@ -62,14 +62,17 @@ public class Donacion {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "donante_id", nullable = false)
     private Usuario donante;
+    
 
-    public enum EstadoDonacion {
-        PENDIENTE,
-        RECOJO_ASIGNADO,
-        EN_CAMINO,
-        ENTREGADO,
-        CANCELADO
-    }
+  public enum EstadoDonacion {
+    PENDIENTE,
+    RECOJO_ASIGNADO,
+    EN_CAMINO,
+    ENTREGADO,
+    COMPLETADA,    // ← AGREGAR ESTO
+    CANCELADO
+}
+
 
     public Long getId() {
         return id;
