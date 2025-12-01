@@ -3,9 +3,13 @@ package com.proy.backend_donaciones.web.controller;
 import com.proy.backend_donaciones.domain.Donation;
 import com.proy.backend_donaciones.domain.dto.CreateDonationRequest;
 import com.proy.backend_donaciones.domain.service.DonationService;
+import com.proy.backend_donaciones.persistence.entity.Donacion;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,6 +45,26 @@ public List<Donation> getMyDonations() {
     public List<Donation> getAll() {
         return donationService.getAll();
     }
+    @PutMapping("/cambiar-estado/{id}")
+@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+public ResponseEntity<?> cambiarEstado(
+  @PathVariable Long id,
+  @RequestParam("estado") String estadoNuevo) {
+    try {
+        // Convertir String a Enum
+        Donacion.EstadoDonacion nuevoEstado = Donacion.EstadoDonacion.valueOf(estadoNuevo.toUpperCase());
+
+        Donacion donacion = donationService.cambiarEstado(id, nuevoEstado);
+
+        return ResponseEntity.ok("Estado actualizado a " + nuevoEstado);
+
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body("Estado inválido: " + estadoNuevo);
+    } catch (RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Donación no encontrada");
+    }
+}
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
