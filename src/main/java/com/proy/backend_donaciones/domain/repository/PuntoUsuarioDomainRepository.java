@@ -1,6 +1,8 @@
 package com.proy.backend_donaciones.domain.repository;
 
 import com.proy.backend_donaciones.domain.UserPoints;
+import com.proy.backend_donaciones.domain.dto.RankingDTO;
+
 import java.util.List;
 
 public interface PuntoUsuarioDomainRepository {
@@ -9,5 +11,5 @@ public interface PuntoUsuarioDomainRepository {
 
     List<UserPoints> getPointsByUser(Long userId);
 
-    List<UserPoints> getAll(); // para ranking
+    List<RankingDTO> getRanking();
 }

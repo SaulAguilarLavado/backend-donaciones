@@ -1,6 +1,7 @@
 package com.proy.backend_donaciones.domain.service;
 
 import com.proy.backend_donaciones.domain.UserPoints;
+import com.proy.backend_donaciones.domain.dto.RankingDTO;
 import com.proy.backend_donaciones.domain.repository.PuntoUsuarioDomainRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class PuntoUsuarioService {
         return repo.getPointsByUser(userId);
     }
 
-    public List<UserPoints> ranking() {
-        return repo.getAll();
-    }
+   public List<RankingDTO> ranking() {
+    return repo.getRanking();
+}
 }

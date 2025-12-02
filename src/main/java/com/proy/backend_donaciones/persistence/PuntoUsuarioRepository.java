@@ -1,6 +1,7 @@
 package com.proy.backend_donaciones.persistence;
 
 import com.proy.backend_donaciones.domain.UserPoints;
+import com.proy.backend_donaciones.domain.dto.RankingDTO;
 import com.proy.backend_donaciones.domain.repository.PuntoUsuarioDomainRepository;
 import com.proy.backend_donaciones.persistence.crud.PuntoUsuarioCrudRepository;
 import com.proy.backend_donaciones.persistence.crud.UsuarioCrudRepository;
@@ -26,7 +27,6 @@ public class PuntoUsuarioRepository implements PuntoUsuarioDomainRepository {
 
     @Override
     public UserPoints save(Long userId, int puntos, String motivo) {
-
         PuntoUsuario entity = new PuntoUsuario();
         entity.setPuntos(puntos);
         entity.setMotivo(motivo);
@@ -44,7 +44,7 @@ public class PuntoUsuarioRepository implements PuntoUsuarioDomainRepository {
     }
 
     @Override
-    public List<UserPoints> getAll() {
-        return mapper.toUserPointsList(crud.findAll());
+    public List<RankingDTO> getRanking() {
+        return crud.obtenerRanking();
     }
 }

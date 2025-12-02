@@ -112,23 +112,42 @@ public class DonationService {
 
     // ---------------------- CAMBIO DE ESTADO (ENTITY JPA) ----------------------
 
-    public Donacion cambiarEstado(Long id, EstadoDonacion nuevoEstado) {
-        Donacion donacion = donacionEntityRepository.findEntityById(id)
-                .orElseThrow(() -> new RuntimeException("Donación no encontrada"));
+  public Donacion cambiarEstado(Long id, EstadoDonacion nuevoEstado) {
 
-        donacion.setEstado(nuevoEstado);
-        donacionEntityRepository.saveEntity(donacion);
+    Donacion donacion = donacionEntityRepository.findEntityById(id)
+            .orElseThrow(() -> new RuntimeException("Donación no encontrada"));
 
-        if (nuevoEstado == EstadoDonacion.COMPLETADA) {
-            puntoUsuarioService.asignarPuntos(
-                donacion.getDonante().getId(), 
-                10,
-                "Donación completada ID #" + donacion.getId()
-            );
-        }
+    EstadoDonacion estadoAnterior = donacion.getEstado();
 
+    if (estadoAnterior == nuevoEstado) {
         return donacion;
     }
+
+    // Cambiar estado
+    donacion.setEstado(nuevoEstado);
+
+    // Guardar
+    Donacion guardada = donacionEntityRepository.saveEntity(donacion);
+
+    // Asignar puntos solo cuando pasa a COMPLETADA
+    if (nuevoEstado == EstadoDonacion.COMPLETADA &&
+        estadoAnterior != EstadoDonacion.COMPLETADA) {
+
+        puntoUsuarioService.asignarPuntos(
+                guardada.getDonante().getId(),
+                10,
+                "Donación completada: " +
+                        guardada.getCategoriaAlimento() + " (" +
+                        guardada.getCantidadAprox() + " " +
+                        guardada.getUnidad() + ")"
+        );
+    }
+
+    return guardada;
+}
+
+
+
 
     // ---------------------- CREAR DONACIÓN DOMAIN ----------------------
 

@@ -1,6 +1,7 @@
 package com.proy.backend_donaciones.web.controller;
 
 import com.proy.backend_donaciones.domain.UserPoints;
+import com.proy.backend_donaciones.domain.dto.RankingDTO;
 import com.proy.backend_donaciones.domain.service.PuntoUsuarioService;
 import com.proy.backend_donaciones.domain.repository.UserRepository;
 
@@ -36,8 +37,8 @@ public class PuntosController {
         return service.verMisPuntos(userId);
     }
 
-    @GetMapping("/ranking")
-    public List<UserPoints> ranking() {
-        return service.ranking();
-    }
+   @GetMapping("/ranking")
+public List<RankingDTO> ranking() {
+    return service.ranking();
+}
 }
