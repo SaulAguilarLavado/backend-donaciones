@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+
 @Entity
 @Table(name = "donaciones")
 public class Donacion {
@@ -51,6 +52,8 @@ public class Donacion {
     @Column(nullable = false)
     private boolean aptoParaConsumo;
 
+    
+
     // --- Datos del Sistema ---
     @Column(nullable = false)
     private LocalDateTime fechaCreacion = LocalDateTime.now();
@@ -59,9 +62,9 @@ public class Donacion {
     @Column(nullable = false, length = 20)
     private EstadoDonacion estado = EstadoDonacion.PENDIENTE;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "donante_id", nullable = false)
-    private Usuario donante;
+    @ManyToOne(fetch = FetchType.EAGER)
+@JoinColumn(name = "donante_id", nullable = false)
+private Usuario donante;
     
 
   public enum EstadoDonacion {
@@ -74,6 +77,18 @@ public class Donacion {
 }
 
 
+@Column(nullable = false, length = 50)
+private String identificacion;
+
+// Getter y Setter
+public String getIdentificacion() {
+    return identificacion;
+}
+
+public void setIdentificacion(String identificacion) {
+    this.identificacion = identificacion;
+}
+
     public Long getId() {
         return id;
     }
@@ -81,6 +96,9 @@ public class Donacion {
     public void setId(Long id) {
         this.id = id;
     }
+
+    
+
 
     public String getCategoriaAlimento() {
         return categoriaAlimento;

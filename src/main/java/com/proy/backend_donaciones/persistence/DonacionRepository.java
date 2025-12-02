@@ -77,4 +77,8 @@ public class DonacionRepository implements DonationRepository {
     public Donacion saveEntity(Donacion donacion) {
         return donacionCrudRepository.save(donacion);
     }
+
+      public List<Donation> findByBeneficiaryId(Long beneficiaryId) {
+        return mapper.toDonations(donacionCrudRepository.findByIdBeneficiarioOrderByFechaCreacionDesc(beneficiaryId));
+    }
 }

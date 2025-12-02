@@ -21,6 +21,16 @@ public class CreateDonationRequest {
     // Paso 4
     private boolean isConsumable;
 
+    private String identificacion;
+
+public String getIdentificacion() {
+    return identificacion;
+}
+
+public void setIdentificacion(String identificacion) {
+    this.identificacion = identificacion;
+}
+
     //<editor-fold desc="Getters y Setters">
 
     public String getFoodCategory() {

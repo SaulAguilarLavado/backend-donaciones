@@ -8,6 +8,7 @@ public interface DonacionCrudRepository extends JpaRepository<Donacion, Long> {
     // Para la página "Estado de Pedido" del usuario
     List<Donacion> findByDonanteIdOrderByFechaCreacionDesc(Long donanteId);
       List<Donacion> findByDonanteEmailOrderByFechaCreacionDesc(String email);
+   List<Donacion> findByIdBeneficiarioOrderByFechaCreacionDesc(Long beneficiarioId);
 
 
 }
