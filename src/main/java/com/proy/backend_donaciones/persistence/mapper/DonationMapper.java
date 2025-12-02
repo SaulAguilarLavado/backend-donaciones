@@ -14,6 +14,8 @@ public interface DonationMapper {
 
     @Mappings({
         @Mapping(source = "donante.id", target = "donorId"),
+        @Mapping(source = "donante.nombre", target = "donorName"), // ← agregado
+        @Mapping(source = "identificacion", target = "identificationType"),
         @Mapping(source = "categoriaAlimento", target = "foodCategory"),
         @Mapping(source = "descripcion", target = "description"),
         @Mapping(source = "cantidadAprox", target = "approximateQuantity"),
@@ -35,7 +37,8 @@ public interface DonationMapper {
 
     @InheritInverseConfiguration
     @Mappings({
-        @Mapping(target = "donante", ignore = true)
+        @Mapping(target = "donante", ignore = true),
+        @Mapping(target = "identificacion", source = "identificationType")
     })
     Donacion toDonacion(Donation donation);
 }

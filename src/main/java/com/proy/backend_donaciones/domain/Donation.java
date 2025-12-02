@@ -12,6 +12,10 @@ public class Donation {
     private String description;
     private Double approximateQuantity;
     private String unit;
+    
+       private String identificationType;
+       private String donorName;       
+    private String beneficiaryName;
 
     // --- Paso 2: Datos del recojo ---
     private String pickupAddress;
@@ -34,6 +38,30 @@ public class Donation {
     //<editor-fold desc="Getters y Setters">
     public Long getId() {
         return id;
+    }
+
+      public String getIdentificationType() {
+        return identificationType;
+    }
+
+    public void setIdentificationType(String identificationType) {
+        this.identificationType = identificationType;
+    }
+
+     public String getDonorName() {
+        return donorName;
+    }
+
+    public void setDonorName(String donorName) {
+        this.donorName = donorName;
+    }
+
+    public String getBeneficiaryName() {
+        return beneficiaryName;
+    }
+
+    public void setBeneficiaryName(String beneficiaryName) {
+        this.beneficiaryName = beneficiaryName;
     }
 
     public void setId(Long id) {
